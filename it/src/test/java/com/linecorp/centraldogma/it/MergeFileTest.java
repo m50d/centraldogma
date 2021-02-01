@@ -79,6 +79,13 @@ class MergeFileTest  {
                                                    MergeSource.ofRequired("/foo3.json")).join())
                 .isInstanceOf(CompletionException.class)
                 .hasCauseInstanceOf(EntryNotFoundException.class);
+
+        final MergedEntry<?> absentFirst = client.mergeFiles("myPro", "myRepo", Revision.HEAD,
+                                                       MergeSource.ofOptional("/foo3.json"),
+                                                       MergeSource.ofRequired("/foo.json")
+        ).join();
+        assertThat(absentFirst.paths()).containsExactly("/foo.json");
+        assertThatJson(absentFirst.content()).isEqualTo("{\"a\": \"bar\"}");
     }
 
     @ParameterizedTest
