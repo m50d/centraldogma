@@ -45,7 +45,14 @@ class CentralDogmaAutoConfigurationTest {
         ClientFactory clientFactory() {
             return clientFactoryNotForCentralDogma;
         }
+
+        @Bean
+        TestBean testBean(ClientFactory nonQualifiedClientFactory) {
+            return new TestBean();
+        }
     }
+
+    private static class TestBean {}
 
     @Inject
     private CentralDogma client;
